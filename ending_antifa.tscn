@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://1kw6ba3koxm1"]
+
+[ext_resource type="Theme" uid="uid://bba6bvfi72k4c" path="res://theme.tres" id="1_unieu"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_lkhnb"]
+font_size = 48
+
+[node name="Ending-Antifa" type="Control" unique_id=1967247839]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="." unique_id=1935535615]
+layout_mode = 0
+offset_left = 77.5
+offset_top = 172.5
+offset_right = 1076.5
+offset_bottom = 475.5
+theme = ExtResource("1_unieu")
+text = "Hello Employee,
+Due to recent events we will be
+stopping all war efforts. This means 
+that you are being let go, effective 
+immediately. Thank you for your 
+understanding."
+label_settings = SubResource("LabelSettings_lkhnb")
