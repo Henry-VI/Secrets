@@ -48,7 +48,7 @@ func _process(delta: float) -> void:
 
 
 
-		$quota.text = "DAILY QUOTA:\n" + str(completed_files) + "/" + str(quota) + " LETTERS COMPLETE\nMISTAKES: " + str(mistakes) + "/7"
+		$quota.text = "DAILY QUOTA:\n" + str(completed_files) + "/" + str(quota) + " LETTERS COMPLETE\nMISTAKES: " + str(mistakes) + "/5"
 
 
 
@@ -56,6 +56,7 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("enter"):
 		var payload: String = $input.text
 		$input.text = ""
+		print(rebel_alliance)
 		match payload.split(" ")[0]:
 			"fillquota":
 				completed_files = quota
@@ -66,7 +67,7 @@ func _input(event: InputEvent) -> void:
 						DirAccess.remove_absolute("user://letters".path_join(file))
 						mistakes += 1 
 						completed_files += 1 
-						if file == "6.txt":
+						if file == "7.txt":
 							rebel_alliance = true
 						$mistakes.text += "\nFile improperly removed"
 						if completed_files == quota:
@@ -157,7 +158,6 @@ rm <file name>   		 deletes a file.
 				if started:
 					if payload.right(-4) != "":
 						var file_name = payload.right(-4)
-						print(file_name)
 						if FileAccess.file_exists("user://letters".path_join(file_name)):
 							censored_words = []
 							var counter = 1
@@ -166,7 +166,6 @@ rm <file name>   		 deletes a file.
 									censored_words.append(counter)
 								counter += 1
 							opened_file = file_name
-							print(censored_words)
 							$Console.text += "\n" + str(FileAccess.open("user://letters/".path_join(file_name), FileAccess.READ).get_as_text())
 						else:
 							$Console.text += "\ncat: " + payload.right(-4) + ": no such file or directory"
@@ -200,7 +199,6 @@ rm <file name>   		 deletes a file.
 						for item in words:
 							words_split_twice.append_array(item.split(" ", false))
 						words = words_split_twice
-						print(words)
 
 						for x in words:
 							if pointer == word_num.to_int():
@@ -214,7 +212,6 @@ rm <file name>   		 deletes a file.
 						$Console.text += "\n" + censored_text
 						file.store_string(censored_text)
 						file.close()
-					print(censored_words)
 			"censorall":
 				if started && opened_file:
 					var file = FileAccess.open("user://letters".path_join(opened_file), FileAccess.READ)
@@ -238,8 +235,6 @@ rm <file name>   		 deletes a file.
 			"censorrange": # at this point we've given up on error handling
 				if started && opened_file && payload.right(-12):
 					var ranges = payload.right(-12).split("-")
-					print(ranges.size())
-					print(ranges)
 					if ranges.size() <= 1:
 						$Console.text += "\ncensorrange: " + payload.right(-12) + ": incomprehensible input"
 						return
@@ -255,7 +250,6 @@ rm <file name>   		 deletes a file.
 						for item in words:
 							words_split_twice.append_array(item.split(" ", false))
 						words = words_split_twice
-						print(words)
 
 						for x in words:
 							if pointer == i:
@@ -493,10 +487,14 @@ rm <file name>   		 deletes a file.
 							else:
 								if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23].all(func(value: int): return value in censored_words):
 									$mistakes.text += "\nSuccessful file."
+									rebel_alliance = false
+								elif censored_words.is_empty():
+									$mistakes.text += "\nImproperly censored file."
+									mistakes += 1
 								else:
 									$mistakes.text += "\nImproperly censored file."
 									mistakes += 1
-							rebel_alliance = false
+									rebel_alliance = false
 							DirAccess.remove_absolute("user://letters/23.txt")
 
 
@@ -507,7 +505,7 @@ rm <file name>   		 deletes a file.
 					censored_words = []
 					if completed_files == quota:
 						$Console.text += "\n\nDAY COMPLETE.\n\ntype 'shutdown' to end the day."
-					if mistakes >= 7:
+					if mistakes >= 5:
 						time_left = 0
 			_:
 				$Console.text += "\nsh: Unknown command: " + payload.split(" ")[0]
