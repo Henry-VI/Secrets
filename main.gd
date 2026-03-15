@@ -48,7 +48,7 @@ func _process(delta: float) -> void:
 
 
 
-		$quota.text = "DAILY QUOTA:\n" + str(completed_files) + "/" + str(quota) + " LETTERS COMPLETE\nMISTAKES: " + str(mistakes) + "/9"
+		$quota.text = "DAILY QUOTA:\n" + str(completed_files) + "/" + str(quota) + " LETTERS COMPLETE\nMISTAKES: " + str(mistakes) + "/7"
 
 
 
@@ -88,41 +88,43 @@ func _input(event: InputEvent) -> void:
 					starting_time = int(starting_time)
 					time_left = starting_time
 					if day == 2:
-						quota = 5
+						quota = 6
 						copy_letter("3.txt")
 						copy_letter("4.txt")
 						copy_letter("5.txt")
 						copy_letter("6.txt")
 						copy_letter("7.txt")
+						copy_letter("8.txt")
 						$rules.text += "\n3. Fully censor messages with hidden codes"
 					if day == 3:
 						quota = 7
-						copy_letter("8.txt")
 						copy_letter("9.txt")
 						copy_letter("10.txt")
 						copy_letter("11.txt")
 						copy_letter("12.txt")
 						copy_letter("13.txt")
 						copy_letter("14.txt")
+						copy_letter("15.txt")
 						$rules.text += "\n4. Fully censor messages in other\nlanguages"
 					if day == 4:
 						quota = 6
 						if rebel_alliance:
-							DirAccess.open("user://letters").copy("res://letters/alt-15.txt", "user://letters/15.txt")
+							DirAccess.open("user://letters").copy("res://letters/alt-16.txt", "user://letters/16.txt")
 						else:
-							copy_letter("15.txt")
-						copy_letter("16.txt")
+							copy_letter("16.txt")
 						copy_letter("17.txt")
 						copy_letter("18.txt")
 						copy_letter("19.txt")
 						copy_letter("20.txt")
+						copy_letter("21.txt")
 						$rules.text += "\n5. Fully censor messages without the\nphrase 'Glory to the leader'."
 					if day == 5:
-						quota = 1 
+						quota = 2
+						copy_letter("22.txt")
 						if rebel_alliance:
-							DirAccess.open("user://letters").copy("res://letters/alt-21.txt", "user://letters/21.txt")
+							DirAccess.open("user://letters").copy("res://letters/alt-23.txt", "user://letters/23.txt")
 						else:
-							copy_letter("21.txt")
+							copy_letter("23.txt")
 						$rules.text += "\n6. Censor all messages under all\ncircumstances."
 					if day == 6:
 						if rebel_alliance:
@@ -157,9 +159,15 @@ rm <file name>   		 deletes a file.
 						var file_name = payload.right(-4)
 						print(file_name)
 						if FileAccess.file_exists("user://letters".path_join(file_name)):
+							censored_words = []
+							var counter = 1
+							for i in FileAccess.open("user://letters".path_join(file_name), FileAccess.READ).get_as_text().split(" "):
+								if i == "***":
+									censored_words.append(counter)
+								counter += 1
 							opened_file = file_name
-							print(opened_file)
-							$Console.text += "\n" + str(FileAccess.open("user://letters/" + file_name, FileAccess.READ).get_as_text())
+							print(censored_words)
+							$Console.text += "\n" + str(FileAccess.open("user://letters/".path_join(file_name), FileAccess.READ).get_as_text())
 						else:
 							$Console.text += "\ncat: " + payload.right(-4) + ": no such file or directory"
 					else:
@@ -318,12 +326,12 @@ rm <file name>   		 deletes a file.
 								mistakes += 1 
 							DirAccess.remove_absolute("user://letters/5.txt")
 						if opened_file == "6.txt":
-							completed_files += 1
-							if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77].all(func(value: int): return value in censored_words):
+							completed_files += 1 
+							if [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32]:
 								$mistakes.text += "\nSuccessful file."
 							else:
-								$mistakes.text += "\nImproperly censored file."
-								mistakes += 1
+								$mistakes.text += "\nOvercensored file."
+								mistakes += 1 
 							DirAccess.remove_absolute("user://letters/6.txt")
 						if opened_file == "7.txt":
 							completed_files += 1
@@ -334,6 +342,14 @@ rm <file name>   		 deletes a file.
 								mistakes += 1
 							DirAccess.remove_absolute("user://letters/7.txt")
 						if opened_file == "8.txt":
+							completed_files += 1
+							if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38].all(func(value: int): return value in censored_words):
+								$mistakes.text += "\nSuccessful file."
+							else:
+								$mistakes.text += "\nImproperly censored file."
+								mistakes += 1
+							DirAccess.remove_absolute("user://letters/8.txt")
+						if opened_file == "9.txt":
 							completed_files += 1 
 							if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38].all(func(value: int): return value in censored_words):
 								$mistakes.text += "\nSuccessful file."
@@ -345,35 +361,35 @@ rm <file name>   		 deletes a file.
 							else:
 								$mistakes.text += "\nImproperly censored file."
 								mistakes += 1
-							DirAccess.remove_absolute("user://letters/8.txt")
-						if opened_file == "9.txt":
+							DirAccess.remove_absolute("user://letters/9.txt")
+						if opened_file == "10.txt":
 							completed_files += 1 
 							if censored_words.is_empty():
 								$mistakes.text += "\nSuccessful file."
 							else:
 								$mistakes.text += "\nOvercensored file."
 								mistakes += 1
-							DirAccess.remove_absolute("user://letters/9.txt")
-						if opened_file == "10.txt":
+							DirAccess.remove_absolute("user://letters/10.txt")
+						if opened_file == "11.txt":
 							completed_files += 1 
 							if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47].all(func(value: int): return value in censored_words):
 								$mistakes.text += "\nSuccessful file."
 							else:
 								$mistakes.text += "\nImproperly censored file."
 								mistakes += 1
-							DirAccess.remove_absolute("user://letters/10.txt")
-						if opened_file == "11.txt":
+							DirAccess.remove_absolute("user://letters/11.txt")
+						if opened_file == "12.txt":
 							completed_files += 1 
 							if censored_words.is_empty():
 								$mistakes.text += "\nSuccessful file."
 							else:
 								$mistakes.text += "\nOvercensored file."
 								mistakes += 1
-							DirAccess.remove_absolute("user://letters/11.txt")
-						if opened_file == "12.txt":
+							DirAccess.remove_absolute("user://letters/12.txt")
+						if opened_file == "13.txt":
 							completed_files += 1 
 							if [20,21,22,23,24,25,26,27,28].all(func(value: int): return value in censored_words):
-								if array_unique(censored_words).size() == 11:
+								if array_unique(censored_words).size() == 9:
 									$mistakes.text += "\nSuccessful file."
 								else:
 									$mistakes.text += "\nOvercensored file."
@@ -381,50 +397,46 @@ rm <file name>   		 deletes a file.
 							else:
 								$mistakes.text += "\nImproperly censored file."
 								mistakes += 1 
-							DirAccess.remove_absolute("user://letters/12.txt")
-						if opened_file == "13.txt":
+							DirAccess.remove_absolute("user://letters/13.txt")
+						if opened_file == "14.txt":
 							completed_files += 1 
 							if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].all(func(value: int): return value in censored_words):
 								$mistakes.text += "\nSuccessful file."
 							else:
 								$mistakes.text += "\nImproperly censored file."
 								mistakes += 1
-							DirAccess.remove_absolute("user://letters/13.txt")
-						if opened_file == "14.txt":
+							DirAccess.remove_absolute("user://letters/14.txt")
+						if opened_file == "15.txt":
 							completed_files += 1
 							if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91].all(func(value: int): return value in censored_words):
 								$mistakes.text += "\nSuccessful file."
 							else:
 								$mistakes.text += "\nImproperly censored file."
 								mistakes += 1
-							DirAccess.remove_absolute("user://letters/14.txt")
-						if opened_file == "15.txt":
+							DirAccess.remove_absolute("user://letters/15.txt")
+						if opened_file == "16.txt":
 							completed_files += 1 
 							if !rebel_alliance:
 								if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38].all(func(value: int): return value in censored_words):
 									$mistakes.text += "\nSuccessful file."
+									rebel_alliance = false
+								elif censored_words.is_empty():
+									$mistakes.text += "\nImproperly censored file."
+									mistakes += 1
 								else:
 									$mistakes.text += "\nImproperly censored file."
 									mistakes += 1
+									rebel_alliance = false
 							else:
 								if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47].all(func(value: int): return value in censored_words):
 									$mistakes.text += "\nSuccessful file."
 								else:
 									$mistakes.text += "\nImproperly censored file."
 									mistakes += 1
-							rebel_alliance = false
-							DirAccess.remove_absolute("user://letters/15.txt")
-						if opened_file == "16.txt":
-							completed_files += 1 
-							if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].all(func(value: int): return value in censored_words):
-								$mistakes.text += "\nSuccessful file."
-							else:
-								$mistakes.text += "\nImproperly censored file."
-								mistakes += 1
 							DirAccess.remove_absolute("user://letters/16.txt")
 						if opened_file == "17.txt":
 							completed_files += 1 
-							if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66].all(func(value: int): return value in censored_words):
+							if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].all(func(value: int): return value in censored_words):
 								$mistakes.text += "\nSuccessful file."
 							else:
 								$mistakes.text += "\nImproperly censored file."
@@ -432,7 +444,7 @@ rm <file name>   		 deletes a file.
 							DirAccess.remove_absolute("user://letters/17.txt")
 						if opened_file == "18.txt":
 							completed_files += 1 
-							if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24].all(func(value: int): return value in censored_words):
+							if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66].all(func(value: int): return value in censored_words):
 								$mistakes.text += "\nSuccessful file."
 							else:
 								$mistakes.text += "\nImproperly censored file."
@@ -440,35 +452,52 @@ rm <file name>   		 deletes a file.
 							DirAccess.remove_absolute("user://letters/18.txt")
 						if opened_file == "19.txt":
 							completed_files += 1 
+							if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24].all(func(value: int): return value in censored_words):
+								$mistakes.text += "\nSuccessful file."
+							else:
+								$mistakes.text += "\nImproperly censored file."
+								mistakes += 1
+							DirAccess.remove_absolute("user://letters/19.txt")
+						if opened_file == "20.txt":
+							completed_files += 1 
 							if censored_words.is_empty():
 								$mistakes.text += "\nSuccessful file."
 							else:
 								$mistakes.text += "\nOvercensored file."
 								mistakes += 1
-							DirAccess.remove_absolute("user://letters/19.txt")
-						if opened_file == "20.txt":
+							DirAccess.remove_absolute("user://letters/20.txt")
+						if opened_file == "21.txt":
 							completed_files += 1 
 							if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27].all(func(value: int): return value in censored_words):
 								$mistakes.text += "\nSuccessful file."
 							else:
 								$mistakes.text += "\nImproperly censored file."
 								mistakes += 1
-							DirAccess.remove_absolute("user://letters/20.txt")
-						if opened_file == "21.txt":
+							DirAccess.remove_absolute("user://letters/21.txt")
+						if opened_file == "22.txt":
+							completed_files += 1 
+							if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26].all(func(value: int): return value in censored_words):
+								$mistakes.text += "\nSuccessful file."
+							else:
+								$mistakes.text += "\nImproperly censored file."
+								mistakes += 1
+							DirAccess.remove_absolute("user://letters/22.txt")
+						if opened_file == "23.txt":
 							completed_files += 1 
 							if !rebel_alliance:
-								if censored_words.is_empty():
+								if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22].all(func(value: int): return value in censored_words):
 									$mistakes.text += "\nSuccessful file."
 								else:
 									$mistakes.text += "\nImproperly censored file."
+									mistakes += 1
 							else:
-								if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26].all(func(value: int): return value in censored_words):
+								if [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23].all(func(value: int): return value in censored_words):
 									$mistakes.text += "\nSuccessful file."
 								else:
 									$mistakes.text += "\nImproperly censored file."
 									mistakes += 1
 							rebel_alliance = false
-							DirAccess.remove_absolute("user://letters/21.txt")
+							DirAccess.remove_absolute("user://letters/23.txt")
 
 
 
@@ -478,7 +507,7 @@ rm <file name>   		 deletes a file.
 					censored_words = []
 					if completed_files == quota:
 						$Console.text += "\n\nDAY COMPLETE.\n\ntype 'shutdown' to end the day."
-					if mistakes >= 9:
+					if mistakes >= 7:
 						time_left = 0
 			_:
 				$Console.text += "\nsh: Unknown command: " + payload.split(" ")[0]
